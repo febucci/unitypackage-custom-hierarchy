@@ -20,6 +20,15 @@ More information about contributing here: https://github.com/firstcontributions/
 - Follow me on Twitter: https://twitter.com/febucci
 - My plugin 'Text Animator for Unity': https://www.textanimator.febucci.com/
 
+## Instructions
+1. Download the latest released version of the .unitypackage here (https://github.com/febucci/unitypackage-custom-hierarchy/releases) and import it in Unity.<br> *[Alternative: download the Source Code and copy the "Assets" folder content inside your project's "Asset" folder.]*
+2. Go to the menu item "Tools/Febucci/CustomHierarchy/Initialize or Create", and if a prompt appears click yes.
+3. The Custom Hierarchy is now activated and you can edit its related 'Settings' file (which is selected every time you click on the previous menu item).
+
+*P.S. You can delete the 'Example' folder if you don't need it anymore.*
+
+TODO: make the package available through the Unity Package Manager <3 (via a GIT url)
+
 ---
 
 **If you find this project useful, please let me know!!!**\
