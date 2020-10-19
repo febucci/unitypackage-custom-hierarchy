@@ -15,6 +15,15 @@ Hi, I’m Febucci and I’ve created this package to help having a clearer Hiera
 More information about contributing here: https://github.com/firstcontributions/first-contributions
 
 ## Links
-- My Game Development Blog: https://www.febucci.com/blog/
+- My Game Development Blog: https://www.febucci.com/blog/ \
+*(P.s. you can stay always up-to-date with my content/posts by subscribing to my gamedev newsletter)*
 - Follow me on Twitter: https://twitter.com/febucci
 - My plugin 'Text Animator for Unity': https://www.textanimator.febucci.com/
+
+---
+
+**If you find this project useful, please let me know!!!**\
+I'd be super happy to see you taking part in it and sharing it around.
+
+
+Have a lovely day and hear you soon, cheers!
