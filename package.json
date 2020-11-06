@@ -5,8 +5,12 @@
     "description": "This package lets you draw a clearer Hierarchy in Unity, organizing everything in a “tree view” and including extra informations like Components Icons and groups/divisors",
     "unity": "2017.4",
     "dependencies": {},
+    "keywords": [
+      "hierarchy",
+      "febucci"
+    ],
     "author": {
-      "name": "Federico Febucci",
+      "name": "Febucci",
       "url": "https://www.febucci.com/"
     }
 }
