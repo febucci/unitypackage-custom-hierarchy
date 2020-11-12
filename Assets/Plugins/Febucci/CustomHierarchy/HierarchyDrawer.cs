@@ -334,24 +334,26 @@ namespace Febucci.HierarchyData
             Scene tempScene;
             firstInstanceID = -1;
             
-            for (int i = 0; i < UnityEditor.SceneManagement.EditorSceneManager.loadedSceneCount; i++)
+            for (int i = 0; i < SceneManager.sceneCount; i++)
             {
                 tempScene = SceneManager.GetSceneAt(i);
-                sceneRoots = tempScene.GetRootGameObjects();
-
-                //Analyzes all scene's gameObjects
-                for (int j = 0; j < sceneRoots.Length; j++)
+                if (tempScene.isLoaded)
                 {
-                    AnalyzeGoWithChildren(
-                        go: sceneRoots[j],
-                        nestingLevel: 0,
-                        sceneRoots[j].transform.childCount>0,
-                        nestingGroup: j,
-                        isLastChild: j == sceneRoots.Length - 1
-                        );
-                }
+                    sceneRoots = tempScene.GetRootGameObjects();
+                    //Analyzes all scene's gameObjects
+                    for (int j = 0; j < sceneRoots.Length; j++)
+                    {
+                        AnalyzeGoWithChildren(
+                            go: sceneRoots[j],
+                            nestingLevel: 0,
+                            sceneRoots[j].transform.childCount > 0,
+                            nestingGroup: j,
+                            isLastChild: j == sceneRoots.Length - 1
+                            );
+                    }
 
-                if (firstInstanceID == -1 && sceneRoots.Length > 0) firstInstanceID = sceneRoots[0].GetInstanceID();
+                    if (firstInstanceID == -1 && sceneRoots.Length > 0) firstInstanceID = sceneRoots[0].GetInstanceID();
+                }
             }
         }
 
