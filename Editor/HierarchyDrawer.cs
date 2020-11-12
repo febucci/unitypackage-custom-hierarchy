@@ -393,8 +393,6 @@ namespace Febucci.HierarchyData
 
                     Type classReferenceType; //todo opt
                     Type componentType;
-                    bool canDrawIcon;
-                    Type[] interfaces;
 
                     foreach (var c in go.GetComponents<Component>())
                     {
