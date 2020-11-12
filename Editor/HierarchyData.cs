@@ -1,5 +1,3 @@
-﻿using System;
-using UnityEditor;
 using UnityEngine;
 
 namespace Febucci.HierarchyData
@@ -8,6 +6,8 @@ namespace Febucci.HierarchyData
     {
         public bool enabled = true;
         
+        public bool updateInPlayMode = true;
+
         #region Icons Data
 
         [System.Serializable]

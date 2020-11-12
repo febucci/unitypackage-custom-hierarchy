@@ -327,6 +327,9 @@ namespace Febucci.HierarchyData
         /// </summary>
         static void RetrieveDataFromScene()
         {
+            if (!data.updateInPlayMode && Application.isPlaying) //temp. fix for performance reasons while in play mode
+                return;
+
             sceneGameObjects.Clear();
             iconsPositions.Clear();
 
