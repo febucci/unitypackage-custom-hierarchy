@@ -224,7 +224,15 @@ namespace Febucci.HierarchyData
         private const string fileName = "HierarchyData";
         static HierarchyData Load()
         {
-            return EditorGUIUtility.Load($"Febucci/{fileName}.asset") as HierarchyData;
+            var result = EditorGUIUtility.Load($"Febucci/{fileName}.asset") as HierarchyData;
+            if (result != null)
+                return result;
+
+            var guids = UnityEditor.AssetDatabase.FindAssets("t:" + nameof(HierarchyData));
+            if (guids.Length == 0)
+                return null;
+
+            return AssetDatabase.LoadAssetAtPath<HierarchyData>(AssetDatabase.GUIDToAssetPath(guids[0]));
         }
 
         /// <summary>
