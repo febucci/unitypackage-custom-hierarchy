@@ -3,7 +3,7 @@
     "version": "1.1.0",
     "displayName": "Custom Hierarchy for Unity",
     "description": "This package lets you draw a clearer Hierarchy in Unity, organizing everything in a “tree view” and including extra informations like Components Icons and groups/divisors",
-    "unity": "2017.4",
+    "unity": "2018.3",
     "dependencies": {},
     "keywords": [
       "hierarchy",
