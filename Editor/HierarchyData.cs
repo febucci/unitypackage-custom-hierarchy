@@ -9,6 +9,8 @@ namespace Febucci.HierarchyData
         
         public bool updateInPlayMode = true;
 
+        public bool drawActivationToggle = true;
+
         #region Icons Data
 
         [System.Serializable]
