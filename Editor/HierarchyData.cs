@@ -73,6 +73,8 @@ namespace Febucci.HierarchyData
             public bool enabled = true;
             public string startString = ">";
             public Color color = new Color(0, 1,1, .15f);
+            public bool fullWidth = false;
+            public bool drawUnderTree = false;
         }
         
         public SeparatorData separator;
