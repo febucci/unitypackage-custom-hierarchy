@@ -341,6 +341,23 @@ namespace Febucci.HierarchyData
             sceneGameObjects.Clear();
             iconsPositions.Clear();
 
+            var prefabStage = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+            if (prefabStage != null)
+            {
+                var prefabContentsRoot = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
+                
+                AnalyzeGoWithChildren(
+                    go: prefabContentsRoot,
+                    nestingLevel: -1,
+                    prefabContentsRoot.transform.childCount > 0,
+                    nestingGroup: 0,
+                    isLastChild: true);
+
+                firstInstanceID = prefabContentsRoot.GetInstanceID();
+
+                return;
+            }
+
             GameObject[] sceneRoots;
             Scene tempScene;
             firstInstanceID = -1;
