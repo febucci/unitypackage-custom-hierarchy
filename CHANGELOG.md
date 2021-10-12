@@ -10,11 +10,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 Minimum Unity Version is 2018.3
 
 ### Added
-- Option to draw a toggle to (de-)activate a GameObject, by [@krisrok][https://github.com/krisrok]
-- Support for PrefabStage, for consistent drawing in the "edit prefab" view, by [@krisrok][https://github.com/krisrok]
+- Option to draw a toggle to (de-)activate a GameObject, by [@krisrok](https://github.com/krisrok)
+- Support for PrefabStage, for consistent drawing in the "edit prefab" view, by [@krisrok](https://github.com/krisrok)
 
 ### Changed
-- The HierarchyData.asset can now be stored outside "EditorDefaultResources" folder as well, by [@shreyanshanchlia][https://github.com/shreyanshanchlia]
+- The HierarchyData.asset can now be stored outside "EditorDefaultResources" folder as well, by [@shreyanshanchlia](https://github.com/shreyanshanchlia)
 
 ## [1.1.0] - Package Manager support - 2020.11.12
 ### Added
