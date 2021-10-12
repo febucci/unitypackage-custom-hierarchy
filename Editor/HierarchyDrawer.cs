@@ -224,7 +224,15 @@ namespace Febucci.HierarchyData
         private const string fileName = "HierarchyData";
         static HierarchyData Load()
         {
-            return EditorGUIUtility.Load($"Febucci/{fileName}.asset") as HierarchyData;
+            var result = EditorGUIUtility.Load($"Febucci/{fileName}.asset") as HierarchyData;
+            if (result != null)
+                return result;
+
+            var guids = UnityEditor.AssetDatabase.FindAssets("t:" + nameof(HierarchyData));
+            if (guids.Length == 0)
+                return null;
+
+            return AssetDatabase.LoadAssetAtPath<HierarchyData>(AssetDatabase.GUIDToAssetPath(guids[0]));
         }
 
         /// <summary>
@@ -332,6 +340,23 @@ namespace Febucci.HierarchyData
 
             sceneGameObjects.Clear();
             iconsPositions.Clear();
+
+            var prefabStage = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+            if (prefabStage != null)
+            {
+                var prefabContentsRoot = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
+                
+                AnalyzeGoWithChildren(
+                    go: prefabContentsRoot,
+                    nestingLevel: -1,
+                    prefabContentsRoot.transform.childCount > 0,
+                    nestingGroup: 0,
+                    isLastChild: true);
+
+                firstInstanceID = prefabContentsRoot.GetInstanceID();
+
+                return;
+            }
 
             GameObject[] sceneRoots;
             Scene tempScene;
@@ -472,11 +497,39 @@ namespace Febucci.HierarchyData
             if (!sceneGameObjects.ContainsKey(instanceID)) return;
 
             currentItem = sceneGameObjects[instanceID];
-            
+            temp_iconsDrawedCount = -1;
+            GameObject go = null;
+
             if (instanceID == firstInstanceID)
             {
                 temp_alternatingDrawed = currentItem.nestingGroup %2 == 0;
             }
+
+            #region Draw Activation Toggle
+            if (data.drawActivationToggle)
+            {
+                temp_iconsDrawedCount++;
+
+                go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+
+                if (go == null)
+                    return;
+
+                var r = new Rect(selectionRect.xMax - 16 * (temp_iconsDrawedCount + 1) - 2, selectionRect.yMin, 16, 16);
+
+                var wasActive = go.activeSelf;
+                var isActive = GUI.Toggle(r, wasActive, "");
+                if (wasActive != isActive)
+                {
+                    go.SetActive(isActive);
+                    if (EditorApplication.isPlaying == false)
+                    {
+                        UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(go.scene);
+                        EditorUtility.SetDirty(go);
+                    }
+                }
+            }
+            #endregion
 
             #region Draw Alternating BG
 
@@ -580,7 +633,6 @@ namespace Febucci.HierarchyData
 
             if (data.icons.enabled)
             {
-                temp_iconsDrawedCount = -1;
                 #region Local Method
 
                 //Draws each component icon
@@ -618,7 +670,7 @@ namespace Febucci.HierarchyData
 
                 {
                     //Draws the gameobject icon, if present
-                    var content = EditorGUIUtility.ObjectContent(EditorUtility.InstanceIDToObject(instanceID), null);
+                    var content = EditorGUIUtility.ObjectContent(go ?? EditorUtility.InstanceIDToObject(instanceID), null);
                     
                     if (content.image && !string.IsNullOrEmpty(content.image.name))
                     {
