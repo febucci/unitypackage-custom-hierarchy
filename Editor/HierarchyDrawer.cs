@@ -69,7 +69,7 @@ namespace Febucci.HierarchyData
                 EditorGUI.DrawRect(originalRect, currentBranch.overlayColor);
             }
 
-            static float GetStartX(Rect originalRect, int nestLevel)
+            public static float GetStartX(Rect originalRect, int nestLevel)
             {
                 return 37 + (originalRect.height-2) * nestLevel;
                 //return originalRect.x                //aligned start position (9 is the magic number here)
@@ -560,7 +560,46 @@ namespace Febucci.HierarchyData
                     drawedPrefabOverlay = true;
                 }
             }
-            
+
+
+            #endregion
+
+            #region Drawing Separators Functionality
+
+            Action drawSeparator = () =>
+            {
+
+                //EditorOnly objects are only removed from build if they're not childrens
+                if (data.separator.enabled && data.separator.color.a > 0
+                                           && currentItem.isSeparator && currentItem.nestingLevel == 0)
+                {
+                    if (data.separator.fullWidth)
+                    {
+                        var startX = HierarchyRenderer.GetStartX(selectionRect, 0) - 6;
+                        var fullWidthRect = new Rect(
+                            startX,
+                            selectionRect.y,
+                            selectionRect.width + (selectionRect.x - startX),
+                            selectionRect.height
+                        );
+                        EditorGUI.DrawRect(fullWidthRect, data.separator.color);
+                    }
+                    else
+                    {
+                        EditorGUI.DrawRect(selectionRect, data.separator.color);
+                    }
+                }
+
+            };
+
+            #endregion
+
+            #region Drawing Separators Under Tree
+
+            if (data.separator.drawUnderTree)
+            {
+                drawSeparator();
+            }
 
             #endregion
             
@@ -617,14 +656,11 @@ namespace Febucci.HierarchyData
 
             #endregion
 
-            #region Drawing Separators
-            
-            //EditorOnly objects are only removed from build if they're not childrens
-            if (data.separator.enabled && data.separator.color.a >0
-                                       && currentItem.isSeparator && currentItem.nestingLevel == 0)
+            #region Drawing Separators Over Tree
+
+            if (!data.separator.drawUnderTree)
             {
-                //Adds color on top of the label
-                EditorGUI.DrawRect(selectionRect, data.separator.color);
+                drawSeparator();
             }
 
             #endregion
