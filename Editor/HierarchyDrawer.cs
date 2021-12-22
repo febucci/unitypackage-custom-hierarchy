@@ -341,10 +341,10 @@ namespace Febucci.HierarchyData
             sceneGameObjects.Clear();
             iconsPositions.Clear();
 
-            var prefabStage = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+            var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage != null)
             {
-                var prefabContentsRoot = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
+                var prefabContentsRoot = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
                 
                 AnalyzeGoWithChildren(
                     go: prefabContentsRoot,
@@ -633,9 +633,9 @@ namespace Febucci.HierarchyData
 
             if (data.icons.enabled)
             {
-                #region Local Method
+                #region Local Methods
 
-                //Draws each component icon
+                // Draws each component icon
                 void DrawIcon(int textureIndex)
                 {
                     //---Icon Alignment---
@@ -644,10 +644,9 @@ namespace Febucci.HierarchyData
                         //Aligns icon based on texture's position on the array
                         int CalculateIconPosition()
                         {
-                            for (int i = 0; i < iconsPositions.Count; i++)
-                            {
-                                if (iconsPositions[i] == textureIndex) return i;
-                            }
+                            for (var i = 0; i < iconsPositions.Count; i++)
+                                if (iconsPositions[i] == textureIndex)
+                                    return i;
 
                             return 0;
                         }
@@ -663,37 +662,54 @@ namespace Febucci.HierarchyData
                     GUI.DrawTexture(
                         new Rect(selectionRect.xMax - 16 * (temp_iconsDrawedCount + 1) - 2, selectionRect.yMin, 16, 16),
                         data.icons.pairs[textureIndex].iconToDraw
-                        );
+                    );
                 }
-
-                #endregion
-
+                
+                // Draws each gameobject icon
+                void DrawGameObjectIcon()
                 {
-                    //Draws the gameobject icon, if present
-                    var content = EditorGUIUtility.ObjectContent(go ?? EditorUtility.InstanceIDToObject(instanceID), null);
-                    
+                    //if enabled
+                    var content = EditorGUIUtility.ObjectContent(
+                        go ?? EditorUtility.InstanceIDToObject(instanceID),
+                        null);
+
                     if (content.image && !string.IsNullOrEmpty(content.image.name))
-                    {
                         if (content.image.name != "d_GameObject Icon" && content.image.name != "d_Prefab Icon")
                         {
                             temp_iconsDrawedCount++;
                             GUI.DrawTexture(
-                                new Rect(
-                                    selectionRect.xMax - 16 * (temp_iconsDrawedCount + 1) - 2, selectionRect.yMin, 16,
-                                    16
-                                    ),
-                                content.image
-                                );
+                                new Rect(selectionRect.xMax - 16 * (temp_iconsDrawedCount + 1) - 2,
+                                    selectionRect.yMin,
+                                    16,
+                                    16),
+                                content.image);
                         }
+                }
+
+                #endregion
+
+                //Draws the gameobject icon, if present & enabled
+                if (data.icons.drawGameObjectIcon)
+                {
+                    //whether to draw only when no pair set
+                    if (data.icons.drawGOIconOnlyIfNoPairSet)
+                    {
+                        //no pair draw
+                        if (currentItem.iconIndexes.Count.Equals(0))
+                        {
+                            DrawGameObjectIcon();
+                        }
+                        
+                        //else dont draw
+                    }
+                    else
+                    {
+                        DrawGameObjectIcon();
                     }
                 }
-                
-                
-                
-                for (int i = 0; i < currentItem.iconIndexes.Count; i++)
-                {
-                    DrawIcon(currentItem.iconIndexes[i]);
-                }
+
+                //Draws the component icons, if present
+                foreach (var index in currentItem.iconIndexes) DrawIcon(index);
             }
 
             #endregion

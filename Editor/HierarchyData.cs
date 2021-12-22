@@ -17,6 +17,9 @@ namespace Febucci.HierarchyData
         public class IconsData
         {
             public bool enabled = true;
+			public bool drawGameObjectIcon = true;
+            public bool drawGOIconOnlyIfNoPairSet = true;
+
             [System.Serializable]
             public struct HierarchyElement
             {
