@@ -629,6 +629,19 @@ namespace Febucci.HierarchyData
 
             #endregion
 
+            if (data.icons.enabled)
+            {
+                temp_iconsDrawedCount++;
+
+                go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+                var comp = go.GetComponent<UnityEngine.MonoBehaviour>();
+                if (comp == null)
+                    return;
+
+                var r = new Rect(selectionRect.xMax - 16 * (temp_iconsDrawedCount + 1) - 2, selectionRect.yMin, 12, 12);
+                DrawQuad(r, Color.grey);
+            }
+            
             #region Drawing Icon
 
             if (data.icons.enabled)
