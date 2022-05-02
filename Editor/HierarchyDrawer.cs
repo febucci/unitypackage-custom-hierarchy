@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -341,10 +341,10 @@ namespace Febucci.HierarchyData
             sceneGameObjects.Clear();
             iconsPositions.Clear();
 
-            var prefabStage = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+            var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage != null)
             {
-                var prefabContentsRoot = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
+                var prefabContentsRoot = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
                 
                 AnalyzeGoWithChildren(
                     go: prefabContentsRoot,
@@ -627,6 +627,30 @@ namespace Febucci.HierarchyData
                 EditorGUI.DrawRect(selectionRect, data.separator.color);
             }
 
+            #endregion
+
+            #region DrawScriptMark
+            if (data.drawScriptMark)
+            {
+                void DrawQuad(Rect position, Color color)
+                {
+                    Texture2D texture = new Texture2D(1, 1);
+                    texture.SetPixel(0, 0, color);
+                    texture.Apply();
+                    GUI.skin.box.normal.background = texture;
+                    GUI.Box(position, GUIContent.none);
+                }
+
+                temp_iconsDrawedCount++;
+
+                go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
+                var comp = go.GetComponent<UnityEngine.MonoBehaviour>();
+                if (comp == null)
+                    return;
+
+                var r = new Rect(selectionRect.xMax - 16 * (temp_iconsDrawedCount + 1) - 2, selectionRect.yMin, 12, 12);
+                DrawQuad(r, Color.grey);
+            }
             #endregion
 
             #region Drawing Icon
