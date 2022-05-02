@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -341,10 +341,10 @@ namespace Febucci.HierarchyData
             sceneGameObjects.Clear();
             iconsPositions.Clear();
 
-            var prefabStage = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+            var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage != null)
             {
-                var prefabContentsRoot = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
+                var prefabContentsRoot = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
                 
                 AnalyzeGoWithChildren(
                     go: prefabContentsRoot,
@@ -629,7 +629,8 @@ namespace Febucci.HierarchyData
 
             #endregion
 
-           if (data.icons.enabled)
+            #region DrawScriptMark
+            if (data.drawScriptMark)
             {
                 void DrawQuad(Rect position, Color color)
                 {
@@ -650,7 +651,8 @@ namespace Febucci.HierarchyData
                 var r = new Rect(selectionRect.xMax - 16 * (temp_iconsDrawedCount + 1) - 2, selectionRect.yMin, 12, 12);
                 DrawQuad(r, Color.grey);
             }
-            
+            #endregion
+
             #region Drawing Icon
 
             if (data.icons.enabled)
