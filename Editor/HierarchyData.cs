@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine;
 
 namespace Febucci.HierarchyData
@@ -10,6 +10,8 @@ namespace Febucci.HierarchyData
         public bool updateInPlayMode = true;
 
         public bool drawActivationToggle = true;
+
+        public bool drawScriptMark = true;
 
         #region Icons Data
 
