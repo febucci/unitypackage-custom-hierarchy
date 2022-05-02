@@ -629,8 +629,17 @@ namespace Febucci.HierarchyData
 
             #endregion
 
-            if (data.icons.enabled)
+           if (data.icons.enabled)
             {
+                void DrawQuad(Rect position, Color color)
+                {
+                    Texture2D texture = new Texture2D(1, 1);
+                    texture.SetPixel(0, 0, color);
+                    texture.Apply();
+                    GUI.skin.box.normal.background = texture;
+                    GUI.Box(position, GUIContent.none);
+                }
+
                 temp_iconsDrawedCount++;
 
                 go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
