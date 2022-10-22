@@ -16,14 +16,15 @@ namespace Febucci.HierarchyData
         [System.Serializable]
         public class IconsData
         {
-            public bool enabled = true;
             [System.Serializable]
             public struct HierarchyElement
             {
                 [SerializeField] public Texture2D iconToDraw;
                 [SerializeField] public MonoScript[] targetClasses;
             }
-            
+
+            public bool enabled = true;
+            public bool componentIcons = true;
             public bool aligned = false;
             public HierarchyElement[] pairs = new HierarchyElement[0];
         }
