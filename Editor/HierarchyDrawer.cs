@@ -674,7 +674,8 @@ namespace Febucci.HierarchyData
                     
                     if (content.image && !string.IsNullOrEmpty(content.image.name))
                     {
-                        if (content.image.name != "d_GameObject Icon" && content.image.name != "d_Prefab Icon")
+                        if (content.image.name != "d_GameObject Icon" && content.image.name != "d_Prefab Icon" &&  content.image.name != "d_PrefabVariant Icon" && 
+content.image.name != "GameObject Icon" && content.image.name != "Prefab Icon" && content.image.name != "PrefabVariant Icon")
                         {
                             temp_iconsDrawedCount++;
                             GUI.DrawTexture(
