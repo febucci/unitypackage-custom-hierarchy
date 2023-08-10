@@ -31,7 +31,7 @@ namespace Febucci.HierarchyData
         {
             Initialize();
         }
-        
+
         static class HierarchyRenderer
         {
             static private HierarchyData.TreeData.BranchGroup currentBranch;
@@ -46,32 +46,32 @@ namespace Febucci.HierarchyData
                         new Color(0.19f, 0.53f, 0.78f)
                     }
                 };
-            
+
             public static void SwitchBranchesColors(int hierarchyIndex)
             {
                 int targetIndex = hierarchyIndex % data.tree.branches.Length;
-                if (data.tree.branches.Length == 0 || data.tree.branches[targetIndex].colors.Length<=0)
+                if (data.tree.branches.Length == 0 || data.tree.branches[targetIndex].colors.Length <= 0)
                 {
                     currentBranch = fallbackGroup;
                     return;
                 }
-                
+
                 currentBranch = data.tree.branches[targetIndex];
             }
-            
+
             private const float barWidth = 2;
-            
+
             public static void DrawNestGroupOverlay(Rect originalRect)
             {
                 if (currentBranch.overlayColor.a <= 0) return;
-                
-                originalRect = new Rect(32, originalRect.y, originalRect.width + (originalRect.x-32), originalRect.height);
+
+                originalRect = new Rect(32, originalRect.y, originalRect.width + (originalRect.x - 32), originalRect.height);
                 EditorGUI.DrawRect(originalRect, currentBranch.overlayColor);
             }
 
             static float GetStartX(Rect originalRect, int nestLevel)
             {
-                return 37 + (originalRect.height-2) * nestLevel;
+                return 37 + (originalRect.height - 2) * nestLevel;
                 //return originalRect.x                //aligned start position (9 is the magic number here)
                 //    - originalRect.height * 2 //GameObject icon offset
                 //    + 9
@@ -85,49 +85,49 @@ namespace Febucci.HierarchyData
 
             public static void DrawVerticalLineFrom(Rect originalRect, int nestLevel)
             {
-                DrawHalfVerticalLineFrom(originalRect, true, nestLevel);   
-                DrawHalfVerticalLineFrom(originalRect, false, nestLevel);   
+                DrawHalfVerticalLineFrom(originalRect, true, nestLevel);
+                DrawHalfVerticalLineFrom(originalRect, false, nestLevel);
             }
 
             public static void DrawHalfVerticalLineFrom(Rect originalRect, bool startsOnTop, int nestLevel)
             {
-                if(currentBranch.colors.Length<=0) return;
+                if (currentBranch.colors.Length <= 0) return;
 
                 DrawHalfVerticalLineFrom(originalRect, startsOnTop, nestLevel, GetNestColor(nestLevel));
             }
-            
+
             public static void DrawHalfVerticalLineFrom(Rect originalRect, bool startsOnTop, int nestLevel, Color color)
             {
                 //Vertical rect, starts from the very left and then proceeds to te right
                 EditorGUI.DrawRect(
                     new Rect(
-                        GetStartX(originalRect, nestLevel), 
-                        startsOnTop ? originalRect.y : (originalRect.y + originalRect.height/2f), 
-                        barWidth, 
-                        originalRect.height/2f
-                        ), 
+                        GetStartX(originalRect, nestLevel),
+                        startsOnTop ? originalRect.y : (originalRect.y + originalRect.height / 2f),
+                        barWidth,
+                        originalRect.height / 2f
+                        ),
                     color
                     );
             }
 
             public static void DrawHorizontalLineFrom(Rect originalRect, int nestLevel, bool hasChilds)
             {
-                if(currentBranch.colors.Length<=0) return;
-                
+                if (currentBranch.colors.Length <= 0) return;
+
                 //Vertical rect, starts from the very left and then proceeds to te right
                 EditorGUI.DrawRect(
                     new Rect(
-                        GetStartX(originalRect, nestLevel), 
-                        originalRect.y  + originalRect.height/2f, 
-                        originalRect.height + (hasChilds ? -5 :  2), 
+                        GetStartX(originalRect, nestLevel),
+                        originalRect.y + originalRect.height / 2f,
+                        originalRect.height + (hasChilds ? -5 : 2),
                         //originalRect.height - 5, 
                         barWidth
-                        ), 
+                        ),
                     GetNestColor(nestLevel)
                     );
             }
         }
-        
+
         #region Types
 
         [Serializable]
@@ -145,7 +145,7 @@ namespace Febucci.HierarchyData
             public bool isLastElement;
             public bool hasChilds;
             public bool topParentHasChild;
-            
+
             public int nestingGroup;
             public int nestingLevel;
         }
@@ -245,9 +245,9 @@ namespace Febucci.HierarchyData
                 Debug.LogWarning("HierarchyIcons: Data already exists, won't create a new one.");
                 return;
             }
-            
+
             //Creates folder
-            if(!AssetDatabase.IsValidFolder("Assets/Editor Default Resources"))
+            if (!AssetDatabase.IsValidFolder("Assets/Editor Default Resources"))
                 AssetDatabase.CreateFolder("Assets", "Editor Default Resources");
 
             string path = "Assets/Editor Default Resources/Febucci";
@@ -311,16 +311,16 @@ namespace Febucci.HierarchyData
                 #endregion
 
                 RetrieveDataFromScene();
-                
+
                 prefabColors.Clear();
                 foreach (var prefab in data.prefabsData.prefabs)
                 {
-                    if (prefab.color.a<=0) continue;
+                    if (prefab.color.a <= 0) continue;
                     if (!prefab.gameObject) continue;
-                    
+
                     int instanceID = prefab.gameObject.GetInstanceID();
-                    if(prefabColors.ContainsKey(instanceID)) continue;
-                    
+                    if (prefabColors.ContainsKey(instanceID)) continue;
+
                     prefabColors.Add(instanceID, prefab.color);
                 }
             }
@@ -341,11 +341,11 @@ namespace Febucci.HierarchyData
             sceneGameObjects.Clear();
             iconsPositions.Clear();
 
-            var prefabStage = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+            var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage != null)
             {
-                var prefabContentsRoot = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
-                
+                var prefabContentsRoot = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
+
                 AnalyzeGoWithChildren(
                     go: prefabContentsRoot,
                     nestingLevel: -1,
@@ -361,7 +361,7 @@ namespace Febucci.HierarchyData
             GameObject[] sceneRoots;
             Scene tempScene;
             firstInstanceID = -1;
-            
+
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
                 tempScene = SceneManager.GetSceneAt(i);
@@ -413,7 +413,7 @@ namespace Febucci.HierarchyData
                 newInfo.isSeparator = String.Compare(go.tag, "EditorOnly", StringComparison.Ordinal) == 0 //gameobject has EditorOnly tag
                                       && (!string.IsNullOrEmpty(go.name) && !string.IsNullOrEmpty(data.separator.startString) && go.name.StartsWith(data.separator.startString)); //and also starts with '>'
 
-                if (data.icons.enabled && data.icons.pairs!=null && data.icons.pairs.Length>0)
+                if (data.icons.enabled && data.icons.pairs != null && data.icons.pairs.Length > 0)
                 {
 
                     #region Components Information (icons)
@@ -423,7 +423,7 @@ namespace Febucci.HierarchyData
 
                     foreach (var c in go.GetComponents<Component>())
                     {
-                        if(!c) continue;
+                        if (!c) continue;
 
                         componentType = c.GetType();
 
@@ -434,11 +434,11 @@ namespace Febucci.HierarchyData
                             //Class inherithance
                             foreach (var classReference in data.icons.pairs[elementIndex].targetClasses)
                             {
-                                if(!classReference) continue;
-                                
+                                if (!classReference) continue;
+
                                 classReferenceType = classReference.GetClass();
-                                
-                                if(!classReferenceType.IsClass) continue;
+
+                                if (!classReferenceType.IsClass) continue;
 
                                 //class ineriths 
                                 if (componentType.IsAssignableFrom(classReferenceType) || componentType.IsSubclassOf(classReferenceType))
@@ -450,6 +450,23 @@ namespace Febucci.HierarchyData
                                     if (!newInfo.iconIndexes.Contains(elementIndex))
                                         newInfo.iconIndexes.Add(elementIndex);
 
+
+                                    break;
+                                }
+                            }
+
+                            // Tags
+                            foreach (var tag in data.icons.pairs[elementIndex].tags)
+                            {
+                                // Matched tag
+                                if (go.tag == tag)
+                                {
+                                    //Adds the icon index to the "positions" list, to draw all of them in order later [if enabled] 
+                                    if (!iconsPositions.Contains(elementIndex)) iconsPositions.Add(elementIndex);
+
+                                    //Adds the icon index to draw, only if it's not present already
+                                    if (!newInfo.iconIndexes.Contains(elementIndex))
+                                        newInfo.iconIndexes.Add(elementIndex);
 
                                     break;
                                 }
@@ -490,7 +507,7 @@ namespace Febucci.HierarchyData
         private static InstanceInfo currentItem;
         private static bool drawedPrefabOverlay;
 
-        
+
         static void DrawCore(int instanceID, Rect selectionRect)
         {
             //skips early if item is not registered or not valid
@@ -502,7 +519,7 @@ namespace Febucci.HierarchyData
 
             if (instanceID == firstInstanceID)
             {
-                temp_alternatingDrawed = currentItem.nestingGroup %2 == 0;
+                temp_alternatingDrawed = currentItem.nestingGroup % 2 == 0;
             }
 
             #region Draw Activation Toggle
@@ -545,14 +562,14 @@ namespace Febucci.HierarchyData
                     temp_alternatingDrawed = true;
                 }
             }
-            
+
 
             #endregion
 
             #region DrawingPrefabsBackground
 
             drawedPrefabOverlay = false;
-            if (data.prefabsData.enabled && prefabColors.Count>0)
+            if (data.prefabsData.enabled && prefabColors.Count > 0)
             {
                 if (prefabColors.ContainsKey(currentItem.prefabInstanceID))
                 {
@@ -560,10 +577,10 @@ namespace Febucci.HierarchyData
                     drawedPrefabOverlay = true;
                 }
             }
-            
+
 
             #endregion
-            
+
             #region Drawing Tree
 
             if (data.tree.enabled
@@ -578,7 +595,7 @@ namespace Febucci.HierarchyData
                     {
                         HierarchyRenderer.DrawNestGroupOverlay(selectionRect);
                     }
-                    
+
 
                     if (currentItem.nestingLevel == 0 && !currentItem.hasChilds)
                     {
@@ -592,11 +609,11 @@ namespace Febucci.HierarchyData
                         {
                             HierarchyRenderer.DrawVerticalLineFrom(selectionRect, i);
                         }
-                        
-                            HierarchyRenderer.DrawHorizontalLineFrom(
-                                selectionRect, currentItem.nestingLevel, currentItem.hasChilds
-                                );
-                        
+
+                        HierarchyRenderer.DrawHorizontalLineFrom(
+                            selectionRect, currentItem.nestingLevel, currentItem.hasChilds
+                            );
+
                     }
 
                 }
@@ -611,16 +628,16 @@ namespace Febucci.HierarchyData
                         );
                     EditorGUI.DrawRect(boldGroupRect, Color.black * .3f);
                 }
-                
+
 
             }
 
             #endregion
 
             #region Drawing Separators
-            
+
             //EditorOnly objects are only removed from build if they're not childrens
-            if (data.separator.enabled && data.separator.color.a >0
+            if (data.separator.enabled && data.separator.color.a > 0
                                        && currentItem.isSeparator && currentItem.nestingLevel == 0)
             {
                 //Adds color on top of the label
@@ -671,7 +688,7 @@ namespace Febucci.HierarchyData
                 {
                     //Draws the gameobject icon, if present
                     var content = EditorGUIUtility.ObjectContent(go ?? EditorUtility.InstanceIDToObject(instanceID), null);
-                    
+
                     if (content.image && !string.IsNullOrEmpty(content.image.name))
                     {
                         if (content.image.name != "d_GameObject Icon" && content.image.name != "d_Prefab Icon")
@@ -687,9 +704,9 @@ namespace Febucci.HierarchyData
                         }
                     }
                 }
-                
-                
-                
+
+
+
                 for (int i = 0; i < currentItem.iconIndexes.Count; i++)
                 {
                     DrawIcon(currentItem.iconIndexes[i]);
