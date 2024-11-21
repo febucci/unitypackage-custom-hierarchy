@@ -142,6 +142,8 @@ namespace Febucci.HierarchyData
             /// Contains the indexes for each icon to draw, eg. draw(iconTextures[iconIndexes[0]]);
             /// </summary>
             public List<int> iconIndexes;
+            public HashSet<Texture2D> componentIcons;
+
             public bool isSeparator;
             public string goName;
             public int prefabInstanceID;
@@ -406,6 +408,9 @@ namespace Febucci.HierarchyData
                 newInfo.topParentHasChild = topParentHasChild;
                 newInfo.goName = go.name;
 
+                if (data.icons.componentIcons)
+                    newInfo.componentIcons = new HashSet<Texture2D>();
+
                 if (data.prefabsData.enabled)
                 {
                     var prefab = PrefabUtility.GetCorrespondingObjectFromSource(go);
@@ -429,9 +434,14 @@ namespace Febucci.HierarchyData
                     foreach (var c in go.GetComponents<Component>())
                     {
                         if(!c) continue;
+                        
+                        if (newInfo.componentIcons != null)
+                        {
+                            var icon = EditorGUIUtility.GetIconForObject(c);
+                            if (icon != null) newInfo.componentIcons.Add(icon);
+                        }
 
                         componentType = c.GetType();
-
                         for (int elementIndex = 0; elementIndex < data.icons.pairs.Length; elementIndex++)
                         {
                             if (!data.icons.pairs[elementIndex].iconToDraw) continue;
@@ -675,8 +685,7 @@ namespace Febucci.HierarchyData
 
                 {
                     //Draws the gameobject icon, if present
-                    var content = EditorGUIUtility.ObjectContent(go ?? EditorUtility.InstanceIDToObject(instanceID), null);
-                    
+                    var content = EditorGUIUtility.ObjectContent(go ?? EditorUtility.InstanceIDToObject(instanceID), null);                    
                     if (content.image && !string.IsNullOrEmpty(content.image.name))
                     {
                         if (content.image.name != "d_GameObject Icon" && content.image.name != "d_Prefab Icon")
@@ -692,12 +701,25 @@ namespace Febucci.HierarchyData
                         }
                     }
                 }
-                
-                
-                
+                                
                 for (int i = 0; i < currentItem.iconIndexes.Count; i++)
                 {
                     DrawIcon(currentItem.iconIndexes[i]);
+                }
+
+                if (data.icons.componentIcons)
+                {
+                    foreach (Texture2D ico in currentItem.componentIcons)
+                    {
+                        temp_iconsDrawedCount++;
+                        GUI.DrawTexture(
+                            new Rect(
+                                selectionRect.xMax - 16 * (temp_iconsDrawedCount + 1) - 2, selectionRect.yMin, 16,
+                                16
+                                ),
+                            ico
+                            );
+                    }
                 }
             }
 
