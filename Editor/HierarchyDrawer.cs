@@ -536,12 +536,12 @@ namespace Febucci.HierarchyData
                 var isActive = GUI.Toggle(r, wasActive, "");
                 if (wasActive != isActive)
                 {
-                    go.SetActive(isActive);
                     if (EditorApplication.isPlaying == false)
                     {
                         UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(go.scene);
-                        EditorUtility.SetDirty(go);
+                        Undo.RecordObject(go, isActive ? "Enabled GameObject" : "Disabled GameObject" );
                     }
+                    go.SetActive(isActive);
                 }
             }
             #endregion
