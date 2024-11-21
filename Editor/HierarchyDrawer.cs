@@ -341,10 +341,10 @@ namespace Febucci.HierarchyData
             sceneGameObjects.Clear();
             iconsPositions.Clear();
 
-            var prefabStage = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
+            var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage != null)
             {
-                var prefabContentsRoot = UnityEditor.Experimental.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
+                var prefabContentsRoot = UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
                 
                 AnalyzeGoWithChildren(
                     go: prefabContentsRoot,
