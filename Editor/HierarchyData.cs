@@ -89,6 +89,7 @@ namespace Febucci.HierarchyData
             public bool enabled = true;
             public bool drawOverlayOnColoredPrefabs = true;
             [Range(0,3)] public float dividerHeigth = 1;
+            public bool drawBranchTails = true;
             public Color baseLevelColor = Color.gray;
 
             [System.Serializable]
